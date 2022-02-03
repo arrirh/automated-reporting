@@ -1,6 +1,6 @@
 image: cr.yandex/crp742p3qacifd2hcon2/practice-da:latest
 
-stages
+stages:
     - init
     - run
 
