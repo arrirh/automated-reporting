@@ -6,30 +6,14 @@ import io
 from datetime import datetime
 
 
-#util
-#_________________________________________________________________________
-def add_plot_to_media_group(media_group, data, x, y, plot_name = 'test_plot.png', add_caption = False, caption = None):
-    sns.lineplot(data = data, x = x, y = y) #строим график
-    plot_object = io.BytesIO() #открываем буфер
-    plt.savefig(plot_object) #сохраняем график в буфер
-    plot_object.name = plot_name #называем файл
-    plot_object.seek(0) #?
-    plt.close() #закрываем график
-    
-    if add_caption:
-        media_group.append(telegram.InputMediaPhoto(plot_object, caption = caption)) 
-    else:
-        media_group.append(telegram.InputMediaPhoto(plot_object)) #caption только для первого
-        
-    return(media_group)
-
+from util import add_plot_to_media_group
 
 
 #initiating bot
 #_________________________________________________________________________
 
-bot = telegram.Bot(token='5252171555:AAGaUq6yiM5XCJ8t2GFPdrEPvtjZwZQVleg')
-chat_id = 329018735
+bot = telegram.Bot(token='5181637517:AAEMTMNyqIEjMlr7HKAgPA1OnnoFiw_wf58')
+chat_id = -727662986
 
 #connection to database
 #_________________________________________________________________________
@@ -69,8 +53,8 @@ text = f'Отчет за предыдущий день ({date}): \n DAU: {dau} �
 #_________________________________________________________________________
 media_group = []
 text = text = f'Отчет за предыдущий день ({date}): \n DAU: {dau} пользователей \n Количество просмотров: {view} \n Количество лайков: {like} \n CTR = {ctr}%'
-add_plot_to_media_group(media_group, df, 'day', 'DAU', plot_name = 'dau_plot.png', add_caption = True, caption = text)
-add_plot_to_media_group(media_group, df, 'day', 'view', plot_name = 'view_plot.png')
-add_plot_to_media_group(media_group, df, 'day', 'like', plot_name = 'like_plot.png')
-add_plot_to_media_group(media_group, df, 'day', 'CTR', plot_name = 'CTR_plot.png')
+add_plot_to_media_group(media_group, df, x = 'day', y = 'DAU', xlab = 'День', ylab = 'DAU', plot_title = 'DAU за последние 7 дней', plot_name = 'dau_plot.png', add_caption = True, caption = text)
+add_plot_to_media_group(media_group, df, x = 'day', y = 'view', xlab = 'День', ylab = 'Кол-во просмотров', plot_title = 'Кол-во просмотров за последние 7 дней', plot_name = 'view_plot.png')
+add_plot_to_media_group(media_group, df, x = 'day', y = 'like', xlab = 'День', ylab = 'Кол-во лайков', plot_title = 'Кол-во лайков за последние 7 дней', plot_name = 'like_plot.png')
+add_plot_to_media_group(media_group, df, x = 'day', y = 'CTR', xlab = 'День', ylab = 'CTR', plot_title = 'CTR за последние 7 дней', plot_name = 'CTR_plot.png')
 bot.send_media_group(chat_id = chat_id, media = media_group)
