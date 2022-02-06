@@ -10,3 +10,4 @@ test_report_job:
         - schedules
     script:
         - python 04a.report-script.py
+        - python 04b.report-script.py
